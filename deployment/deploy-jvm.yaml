@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ktornative
+  name: ktorjvm
 spec:
   replicas: 1
   strategy:
@@ -12,15 +12,15 @@ spec:
   progressDeadlineSeconds: 600
   selector:
     matchLabels:
-      app: ktornative
+      app: ktorjvm
   template:
     metadata:
       labels:
-        app: ktornative
+        app: ktorjvm
         version: c
     spec:
       containers:
-      - name: ktornative
+      - name: ktorjvm
         image: ktor-jvm-server:1.0.1
         env:
           - name: HOST

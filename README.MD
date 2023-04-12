@@ -1,5 +1,32 @@
 This repo is an adjusted copy of [nomisRev/ktor-k8s-zero-downtime](https://github.com/nomisRev/ktor-k8s-zero-downtime) that compiles to JVM instead of Native.
 
+# Ktor on JVM and Native (linux) in Docker and Kubernetes
+This repo is an adjusted copy of [nomisRev/ktor-k8s-zero-downtime](https://github.com/nomisRev/ktor-k8s-zero-downtime) that compiles to JVM instead of Native.
+I use it to compare performance with nomisRev's native variant for my KotlinConf 2023 talk.
+
+## Load test with Ddosify
+```
+ ddosify -t http://127.0.0.1:52164/user?id=1 -d 60 -n 60 -l incremental
+ ```
+52159
+52164
+
+## PromQL (Prometheus)
+
+```
+(kube_pod_status_container_ready_time - kube_pod_start_time)* on (pod) kube_pod_info{pod=~"ktor.+"}
+```
+```
+(container_memory_working_set_bytes)* on (pod) kube_pod_info{pod=~"ktor.+"}
+```
+
+```
+sum(
+    rate(container_cpu_usage_seconds_total[5m])
+) by (pod) * on (pod) kube_pod_info{pod=~"ktor.+"}
+```
+
+# BELOW IS THE ORIGINAL README
 # Webinar: Graceful Resource Handling Using Structured Concurrency in Kotlin
 
 Modern programming often requires us to make strong guarantees about how our applications terminate. One way to do this is through the use of structured concurrency, which allows us to reason about parallel processes and how they relate to each other.
